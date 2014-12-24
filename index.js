@@ -11,16 +11,20 @@ function slash(name) {
 
 function staticFunction(options){
  	var builtPackages=[];
-	var compressCss = true;
+	var compressCss = false;
 	var compressStyl = true;
 
  	options.styl = slash( options.styl );
  	options.css = slash( options.css) || options.styl;
  	options.json = slash( options.json) || options.styl;
  	options.dest = slash( options.dest ) || options.styl;
-	middleware.config = function(options){
-		if (typeof options.compressCss != "undefined") compressCss = !!options.compressCss;
-		if (typeof options.compressStyl != "undefined") compressStyl = !!options.compressStyl;
+	middleware.config = function( config ){
+		if (typeof config.compressCss != "undefined") compressCss = !!config.compressCss;
+		if (typeof config.compressStyl != "undefined") compressStyl = !!config.compressStyl;
+		if (typeof config.styl != "undefined") options.styl = slash( config.styl );
+		if (typeof config.css != "undefined") options.css = slash( config.css);
+		if (typeof config.json != "undefined") options.json = slash( config.json);
+		if (typeof config.dest != "undefined") options.dest = slash( config.dest );
 		return middleware;
 	}
  	return middleware;
