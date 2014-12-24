@@ -1,0 +1,26 @@
+{
+  "name": "csstylus",
+  "version": "0.0.1",
+  "description": "Compile, Minify and concatenate stylus and css files and serve them as a unique css file",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "github.com/rouabhi/csstylus"
+  },
+  "keywords": [
+    "css",
+    "stylus",
+    "minify",
+    "minification",
+    "middleware"
+  ],
+  "author": {
+    "name": "Samir ROUABHI",
+    "email": "rouabhi@gmail.com"
+  },
+  "license": "GNU GPL v2",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "stylus":"*"
+  }
+}
