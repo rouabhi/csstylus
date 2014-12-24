@@ -7,13 +7,22 @@ function slash(name) {
  return name;
 }
 
- csstylus.static=function(options){
+ csstylus.static=staticFunction;
+
+function staticFunction(options){
  	var builtPackages=[];
+	var compressCss = true;
+	var compressStyl = true;
 
  	options.styl = slash( options.styl );
  	options.css = slash( options.css) || options.styl;
  	options.json = slash( options.json) || options.styl;
  	options.dest = slash( options.dest ) || options.styl;
+	middleware.config = function(options){
+		if (typeof options.compressCss != "undefined") compressCss = !!options.compressCss;
+		if (typeof options.compressStyl != "undefined") compressStyl = !!options.compressStyl;
+		return middleware;
+	}
  	return middleware;
 
  	function json2css( package ){
@@ -29,17 +38,17 @@ function slash(name) {
  			if (!moduleExtension) {
  				filePath = options.styl+fileName+".styl";
  				str = fs.readFileSync(filePath, 'utf8')
-	 			result += stylus.render( str )+"\n";
+	 			result += stylus.render(str , {"compress":compressStyl})+"\n";
  			}
  			else if (moduleExtension[0]==".styl") {
  				filePath=options.styl+fileName;
  				str = fs.readFileSync(filePath, 'utf8')
-	 			result += stylus.render(str , {"compress":true})+"\n";
+	 			result += stylus.render(str , {"compress":compressStyl})+"\n";
  			} 
  			else if (moduleExtension[0]==".css") {
  				filePath=options.css+fileName;
  				str = fs.readFileSync(filePath, 'utf8')
-	 			result += stylus.render(str , {"compress":true})+"\n";
+	 			result += (compressCss ? stylus.render(str , {"compress":true}) : str) +"\n";
  			} 
  		}
 		fs.writeFile(options.dest+package.name+".css", result, function(err){
@@ -50,7 +59,7 @@ function slash(name) {
  		return result;
  	}
 
-	function middleware(req, res, next){
+ 	function middleware(req, res, next){
 		var packageName = req.url.match(/^\/[\w\.\-]+\.css$/);
 
 		if (!packageName) {
@@ -59,7 +68,7 @@ function slash(name) {
 		}
 		packageName = packageName[0].slice(1,-4);
 		if (builtPackages.indexOf( packageName )>=0) {
-			res.redirec( options.dest+packageName+".css" );
+			res.redirect( options.dest+packageName+".css" );
 			//res.sendFile(options.dest+packageName+".css" , function(err){if (err) res.status(404).end();});
 			return;
 		}

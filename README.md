@@ -32,5 +32,18 @@ The middleware is now mounted to the path ```/csstylus```. In your HTML file you
 ```
 The first time the file is invoked, it is built and stored in the dst directory. The next time it is referenced, it is cerved directly.
 
+## File compression ##
+You can decide whether ```.css``` and ```.styl``` files are compressed, separately by calling .config method of the middleware:
+
+```javascript
+app.use( '/csstylus', csstylus.static({
+                        styl:__dirname+'/styles/styl',
+                        css:__dirname+'/styles/css',
+                        json:__dirname+'/styles/json',
+                        dest:__dirname+'/styles/dest'
+                    }).config({compressCss:true,compressStyl:false}) ) );
+```
+Default values are  ```{compressCss:false,compressStyl:true}```
+
 ## What if a file modified?##
 The final ```.css``` file is created on the first time it is invoqued. Modification date is not checked. So, to rebuild it, you should just relaunch **node.js**.
