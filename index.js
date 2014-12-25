@@ -72,8 +72,7 @@ function staticFunction(options){
 		}
 		packageName = packageName[0].slice(1,-4);
 		if (builtPackages.indexOf( packageName )>=0) {
-			res.redirect( options.dest+packageName+".css" );
-			//res.sendFile(options.dest+packageName+".css" , function(err){if (err) res.status(404).end();});
+			res.sendFile(options.dest+packageName+".css" , function(err){if (err) res.status(404).end();});
 			return;
 		}
 
