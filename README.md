@@ -19,7 +19,20 @@ app.use( '/csstylus', csstylus.static({
                         styl:__dirname+'/styles/styl',
                         css:__dirname+'/styles/css',
                         json:__dirname+'/styles/json',
-                        dest:__dirname+'/styles/dest'
+                        dest:__dirname+'/styles/dest',
+                        files:__dirname+'/styles/files'
+                    }) );
+```
+
+Another way to do the same thing is:
+```javascript
+app.use( '/csstylus', csstylus.static()
+                     .config({
+                        styl:__dirname+'/styles/styl',
+                        css:__dirname+'/styles/css',
+                        json:__dirname+'/styles/json',
+                        dest:__dirname+'/styles/dest',
+                        files:__dirname+'/styles/files'
                     }) );
 ```
 

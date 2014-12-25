@@ -1,6 +1,6 @@
 {
   "name": "csstylus",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Compile, Minify and concatenate stylus and css files and serve them as a unique css file",
   "main": "index.js",
   "repository": {
