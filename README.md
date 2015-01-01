@@ -54,7 +54,7 @@ app.use( '/csstylus', csstylus.static({
                         css:__dirname+'/styles/css',
                         json:__dirname+'/styles/json',
                         dest:__dirname+'/styles/dest'
-                    }).config({compressCss:true,compressStyl:false}) ) );
+                    }).config({minifyCss:true,minifyStyl:false}) ) );
 ```
 Default values are  ```{compressCss:false,compressStyl:true}```
 

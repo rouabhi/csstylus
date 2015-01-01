@@ -17,8 +17,10 @@ function staticFunction(config){
 
 	function params(config){
 		if (config){
-			if (typeof config.compressCss == "string") compressCss = !!config.compressCss;
-			if (typeof config.compressStyl == "string") compressStyl = !!config.compressStyl;
+			if (typeof config.compressCss == "boolean") compressCss = config.compressCss;
+			if (typeof config.minifyCss == "boolean") compressCss = config.minifyCss;
+			if (typeof config.compressStyl == "boolean") compressStyl = !!config.compressStyl;
+			if (typeof config.minifyStyl == "boolean") compressStyl = !!config.minifyStyl;
 			if (typeof config.styl == "string") {
 				options.styl = slash( config.styl );
 				options.css = options.css || options.styl;
@@ -52,17 +54,36 @@ function staticFunction(config){
 
  			if (!moduleExtension) {
  				filePath = options.styl+fileName+".styl";
- 				str = fs.readFileSync(filePath, 'utf8')
+
+ 				try{
+	str = fs.readFileSync(filePath, 'utf8')
+	 			}
+	 			catch(e){
+	 				str="";
+	 				console.log("Error reading file '"+fileName+"' on package '"+package.name+".json'");
+	 			}
 	 			result += stylus.render(str , {"compress":compressStyl})+"\n";
  			}
  			else if (moduleExtension[0]==".styl") {
  				filePath=options.styl+fileName;
- 				str = fs.readFileSync(filePath, 'utf8')
+ 				try{
+	 				str = fs.readFileSync(filePath, 'utf8');
+	 			}
+	 			catch(e){
+	 				str="";
+	 				console.log("Error reading file '"+fileName+"' on package '"+package.name+".json'");
+	 			}
 	 			result += stylus.render(str , {"compress":compressStyl})+"\n";
  			} 
  			else if (moduleExtension[0]==".css") {
  				filePath=options.css+fileName;
- 				str = fs.readFileSync(filePath, 'utf8')
+ 				try{
+	 				str = fs.readFileSync(filePath, 'utf8')
+	 			}
+	 			catch(e){
+	 				str="";
+	 				console.log("Error reading file '"+fileName+"' on package '"+package.name+".json'");
+	 			}
 	 			result += (compressCss ? stylus.render(str , {"compress":true}) : str) +"\n";
  			} 
  		}
@@ -75,9 +96,10 @@ function staticFunction(config){
  	}
 
  	function middleware(req, res, next){
-		var packageName = req.url.match(/\/[\w\.\-]+\.css$/);
+		var packageName = req.url.match(/\/[\w\.\-]+\.css$/),
+		    package;
 
-		if (!packageName) {
+		if (!packageName) { // if no css file requested, serve static files
 			res.sendFile(req.url , {root:options.files}, function(err){if (err) res.status(404).end();});
 			return;
 		}
@@ -87,7 +109,12 @@ function staticFunction(config){
 			return;
 		}
 
-		var package     = require(options.json+packageName+".json");
+		try{
+			package     = require(options.json+packageName+".json");
+		} catch(e){
+			res.status(404).end();
+			return;
+		}
 		package.name = packageName;
 		res.status(200).type('.css').send(json2css( package ));
 	}
