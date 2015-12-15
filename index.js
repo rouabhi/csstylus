@@ -11,16 +11,14 @@ function slash(name) {
 
 function staticFunction(config){
  	var builtPackages=[];
-	var compressCss = false;
-	var compressStyl = true;
+	var minifyCss = false;
+	var minifyStyl = true;
 	var options = {};
 
 	function params(config){
 		if (config){
-			if (typeof config.compressCss == "boolean") compressCss = config.compressCss;
-			if (typeof config.minifyCss == "boolean") compressCss = config.minifyCss;
-			if (typeof config.compressStyl == "boolean") compressStyl = !!config.compressStyl;
-			if (typeof config.minifyStyl == "boolean") compressStyl = !!config.minifyStyl;
+			if (typeof config.minifyCss == "boolean") minifyCss = config.minifyCss;
+			if (typeof config.minifyStyl == "boolean") minifyStyl = !!config.minifyStyl;
 			if (typeof config.styl == "string") {
 				options.styl = slash( config.styl );
 				options.css = options.css || options.styl;
@@ -62,7 +60,7 @@ function staticFunction(config){
 	 				str="";
 	 				console.log("Error reading file '"+fileName+"' on package '"+package.name+".json'");
 	 			}
-	 			result += stylus.render(str , {"compress":compressStyl})+"\n";
+	 			result += stylus.render(str , {"compress":minifyStyl})+"\n";
  			}
  			else if (moduleExtension[0]==".styl") {
  				filePath=options.styl+fileName;
@@ -73,7 +71,7 @@ function staticFunction(config){
 	 				str="";
 	 				console.log("Error reading file '"+fileName+"' on package '"+package.name+".json'");
 	 			}
-	 			result += stylus.render(str , {"compress":compressStyl})+"\n";
+	 			result += stylus.render(str , {"compress":minifyStyl})+"\n";
  			} 
  			else if (moduleExtension[0]==".css") {
  				filePath=options.css+fileName;
@@ -84,7 +82,7 @@ function staticFunction(config){
 	 				str="";
 	 				console.log("Error reading file '"+fileName+"' on package '"+package.name+".json'");
 	 			}
-	 			result += (compressCss ? stylus.render(str , {"compress":true}) : str) +"\n";
+	 			result += (minifyCss ? stylus.render(str , {"compress":true}) : str) +"\n";
  			} 
  		}
 		fs.writeFile(options.dest+package.name+".css", result, function(err){

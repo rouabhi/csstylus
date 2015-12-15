@@ -1,4 +1,4 @@
-# csstylus #
+# csstylus
 A node.js package tCompile, Minify and concatenate stylus and css files and serve them as a unique css file.
 
 ## How does it work ? ##
@@ -39,14 +39,16 @@ app.use( '/csstylus', csstylus.static()
 The only mandatory parameter is ```styl```. All not given parameter are taken from the same value ```styl```.
 
 
-The middleware is now mounted to the path ```/csstylus```. In your HTML file you should include these 2 lines:
+The middleware is now mounted to the path ```/csstylus```. In your HTML file you should include this line:
+
 ```html
 <link href="/csstylus/final.css" rel="stylesheet">
 ```
-The first time the file is invoked, it is built and stored in the dst directory. The next time it is referenced, it is cerved directly.
+
+The first time the file is invoked, it is built and stored in the ```dest``` directory. The next time it is referenced, it is served directly.
 
 ## File compression ##
-You can decide whether ```.css``` and ```.styl``` files are compressed, separately by calling .config method of the middleware:
+You can decide whether ```.css``` and ```.styl``` files are compressed or not, by calling .config method of the middleware:
 
 ```javascript
 app.use( '/csstylus', csstylus.static({
@@ -56,7 +58,8 @@ app.use( '/csstylus', csstylus.static({
                         dest:__dirname+'/styles/dest'
                     }).config({minifyCss:true,minifyStyl:false}) ) );
 ```
-Default values are  ```{compressCss:false,compressStyl:true}```
 
-## What if a file modified?##
+Default values are  ```{minifyCss:false, minifyStyl:true}```
+
+## What if a file modified? ##
 The final ```.css``` file is created on the first time it is invoqued. Modification date is not checked. So, to rebuild it, you should just relaunch **node.js**.

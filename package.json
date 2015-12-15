@@ -1,11 +1,11 @@
 {
   "name": "csstylus",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Compile, Minify and concatenate stylus and css files and serve them as a unique css file",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "github.com/rouabhi/csstylus"
+    "url": "https://github.com/rouabhi/csstylus.git"
   },
   "keywords": [
     "css",
